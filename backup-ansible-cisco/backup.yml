@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  tasks:
+   - name: Get ansible date/time facts
+     setup:
+       filter: "ansible_date_time"
+       gather_subset: "!all"
+
+   - name: Store DTG as fact
+     set_fact:
+       DTG: "{{ ansible_date_time.date }}"
+
+- hosts: switches
+  connection: network_cli
+  tasks:
+    - name: "task1"
+      ios_command:
+        commands: "show version"
+      register: cli_result
+
+    - name: "task2"
+      debug:
+        msg: "{{ cli_result }}" 
+
+
+
+    - name: "task4"
+      copy:
+        content: "{{ cli_result.stdout[0]  }}"
+        dest: "outputs/{{inventory_hostname}}-{{hostvars.localhost.DTG}}.txt"
