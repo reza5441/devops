@@ -1,0 +1,11 @@
+---
+all:
+  children:
+    switches:
+      hosts:
+        l22:
+        l21:
+    routers:
+      hosts:
+        R1:
+        R2:
